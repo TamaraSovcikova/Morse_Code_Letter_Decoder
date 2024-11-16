@@ -4,7 +4,7 @@
 #include "includes/seven_segment.h"
 #include <time.h>
 #include <stdbool.h>
-// #include "hardware/pwm.h" BUZZER
+#include "includes/buzzer.h"
 
 // Global variables
 #define BUTTON_PIN 16
@@ -12,6 +12,9 @@
 #define DOT_THRESHOLD 250   // Threshold for a dot (quick press)
 #define LETTER_GAP_THRESHOLD 2000  // Gap time for letter output (2 seconds)
 #define MAX_MORSE_LENGTH 4  
+#define NEGATIVE_FREQUENCY 165  // Error beep (E3)
+#define DOT_FREQUENCY 440       // Dot beep (A4)
+#define DASH_FREQUENCY 349      // Dash beep (F4)
 
 clock_t start_time;
 double time_taken;
@@ -21,20 +24,21 @@ char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //TEMP
 
 int decoder(char *morse_code);
 char checkButton(double time_taken);
-void sleep_ms_with_display_update(int ms);
 void displayNewLetter();
+void playNote(unsigned int frequency, int duration_ms);
+void buzzer_negative();
+void buzzer_short_beep();
+void buzzer_long_beep();
 
 int main() {
     stdio_init_all();
     seven_segment_init();
     seven_segment_off();
-    // buzzer_init(); BUZZER
+    buzzer_init(); 
 
     gpio_init(BUTTON_PIN);
     gpio_set_dir(BUTTON_PIN, GPIO_IN);
     gpio_pull_down(BUTTON_PIN);
-    // gpio_init(BUZZER_PIN); BUZZER
-    // gpio_set_dir(BUZZER_PIN, GPIO_OUT); BUZZER 
 
     bool button_released = true;
 
@@ -88,18 +92,15 @@ void displayNewLetter() {
     int index = decoder(morseCodeInput);
     if (index == -1) {
           printf("INPUT IS INVALID");
+          buzzer_negative();
     }
     else {
         printf("Letter to display is: %c\n", alphabet[index]);
-    }
-    morseCodeInput[0] = '\0';  // Reset Morse code input
-    printf("Resetting morseCodeInput: %s\n", morseCodeInput);
-    seven_segment_off();
-    if (index >= 0) {
         seven_segment_show(index);
-    } else {
-        printf("Invalid Morse code\n");
     }
+
+    morseCodeInput[0] = '\0';  // Reset Morse code input 
+    seven_segment_off();
 }
 
 int decoder(char *morse_code) {
@@ -118,33 +119,32 @@ int decoder(char *morse_code) {
 
 char checkButton(double time_taken) {
     if (time_taken < DOT_THRESHOLD) {
+        buzzer_short_beep();
         return '.';  // Quick press is a dot
     } else {
+        buzzer_long_beep();
         return '-';  // Long press is a dash
     }
 }
 
-void sleep_ms_with_display_update(int ms) {
-    sleep_ms(ms);
-    seven_segment_off();
+void playNote(unsigned int frequency, int duration_ms) {	
+	buzzer_enable(frequency);
+	sleep_ms(duration_ms);	
+    buzzer_disable(); //Not sure if this needs to be here
 }
 
-// // Function that generates a short beep
-// void sound_dot() {
-// 	playNote(DOT_FREQUENCY, 200);
-// }
+void buzzer_negative() {
+	playNote(NEGATIVE_FREQUENCY, 1000);
+}
 
-// // Function that generates a short beep
-// void sound_dash() {
-// 	playNote(DASH_FREQUENCY, 800);
-// }
+void buzzer_short_beep() {
+	playNote(DOT_FREQUENCY, 200);
+}
 
-// // Function that generates a short beep
-// void sound_negative() {
-// 	playNote(NEGATIVE_FREQUENCY, 1000);
-// }
+void buzzer_long_beep() {
+	playNote(DASH_FREQUENCY, 800);
+}
 
-// void playNote(unsigned int frequency, int duration_ms) {	
-// 	buzzer_enable(frequency);
-// 	sleep_ms(duration_ms);	
-// }
+
+
+
