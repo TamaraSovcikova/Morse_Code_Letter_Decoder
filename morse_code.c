@@ -1,26 +1,31 @@
 #include <stdio.h>
 #include <string.h>
-#include "pico/stdlib.h"
-#include "includes/seven_segment.h"
 #include <time.h>
 #include <stdbool.h>
+#include "hardware/adc.h"
+#include "pico/stdlib.h"
+#include "includes/seven_segment.h"
 #include "includes/buzzer.h"
+#include "includes/potentiometer.h"
+
 
 // Global variables
 #define BUTTON_PIN 16
 #define DEBOUNCE_DELAY 200
 #define DOT_THRESHOLD 250   // Threshold for a dot (quick press)
-#define LETTER_GAP_THRESHOLD 2000  // Gap time for letter output (2 seconds)
 #define MAX_MORSE_LENGTH 4  
 #define NEGATIVE_FREQUENCY 165  // Error beep (E3)
 #define DOT_FREQUENCY 440       // Dot beep (A4)
 #define DASH_FREQUENCY 349      // Dash beep (F4)
+#define DEFAULT_TIME_LIMIT 4000   // Default time limit (4 seconds)
+
 
 clock_t start_time;
 double time_taken;
 char morseCodeInput[MAX_MORSE_LENGTH + 1] = "";  // Holds the Morse code input (e.g., "-.-")
 bool is_button_pressed = false;
 char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //TEMP
+unsigned int time_limit = DEFAULT_TIME_LIMIT;
 
 int decoder(char *morse_code);
 char checkButton(double time_taken);
@@ -29,12 +34,15 @@ void playNote(unsigned int frequency, int duration_ms);
 void buzzer_negative();
 void buzzer_short_beep();
 void buzzer_long_beep();
+unsigned int get_time_limit_from_potentiometer();
 
 int main() {
     stdio_init_all();
     seven_segment_init();
     seven_segment_off();
     buzzer_init(); 
+    potentiometer_init();
+
 
     gpio_init(BUTTON_PIN);
     gpio_set_dir(BUTTON_PIN, GPIO_IN);
@@ -74,8 +82,11 @@ int main() {
             } else {
                 // Check for letter gap
                 clock_t current_time = clock();
+
+                //setting the time limit based on the potentiometer
+                time_limit = get_time_limit_from_potentiometer();
                 double time_gap = (double)(current_time - start_time) / CLOCKS_PER_SEC * 1000;
-                if (time_gap > LETTER_GAP_THRESHOLD && strlen(morseCodeInput) > 0) {
+                if (time_gap > time_limit && strlen(morseCodeInput) > 0) {
                     printf("Letter gap detected\n");
                     displayNewLetter();
                 }
@@ -143,6 +154,15 @@ void buzzer_short_beep() {
 
 void buzzer_long_beep() {
 	playNote(DASH_FREQUENCY, 800);
+}
+
+unsigned int get_time_limit_from_potentiometer() {    
+    unsigned int pot_value = potentiometer_read(9);
+    // Map the potentiometer value (0 - 9) to the time limit range (1000 ms to 5000 ms)
+    unsigned int mapped_time_limit = MIN_TIME_LIMIT + (pot_value * (MAX_TIME_LIMIT - MIN_TIME_LIMIT)) / 9;
+
+    printf("Current time limit: %d ms\n", mapped_time_limit);
+    return mapped_time_limit;
 }
 
 
