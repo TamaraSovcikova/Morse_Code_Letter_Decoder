@@ -22,6 +22,18 @@
 #define DEFAULT_TIME_LIMIT 4000   // Default time limit (4 seconds)
 #define MAX_TIME_LIMIT 10000
 #define MIN_TIME_LIMIT 1000
+#define RED 13
+#define GREEN 12 
+#define BLUE 11
+#define BRIGHTNESS 50              // Default brightness value 
+#define MAX_COLOUR_VALUE 255       // Max parameter value in show_rgb
+#define MAX_PWM_LEVEL 65535        // Max pulse level value  
+#define A_NOTE 880
+#define D_NOTE 587
+#define F_NOTE 698
+#define E_NOTE 659
+#define G_NOTE 784
+#define FSharp_NOTE 739 
 
 
 clock_t start_time;
@@ -30,6 +42,8 @@ char morseCodeInput[MAX_MORSE_LENGTH + 1] = "";  // Holds the Morse code input (
 bool is_button_pressed = false;
 char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //TEMP
 unsigned int time_limit = DEFAULT_TIME_LIMIT;
+char word[4]; // TEMP to display word 
+int count = 0; // count the number of correct inputs
 
 int decoder(char *morse_code);
 char checkButton(double time_taken);
@@ -39,6 +53,11 @@ void buzzer_negative();
 void buzzer_short_beep();
 void buzzer_long_beep();
 unsigned int get_time_limit_from_potentiometer();
+void setup_rgb();   // Used to intialize the parameters of the RGB LED 
+void show_rgb(int r, int g, int b); // Used to input the colour value for R/G/B
+bool input_validity;
+void play_tune(); // tune if word is 4 letters long 
+
 
 int main() {
     timer_hw->dbgpause = 0;
@@ -114,6 +133,31 @@ printf("time limit 1 %d \n", time_limit);
                 if (time_gap > time_limit && strlen(morseCodeInput) > 0) {
                     printf("Letter gap detected\n");
                     displayNewLetter();
+                    //BELOW
+                    if (count == 4){
+                        // Displau the 4 letter word
+                        printf("The word inputted is:", word);
+                        // Reset the array after word is displayed 
+                        for (int i = 0; i < 5; i++){
+                            word[i] = '\0';
+                        }
+                        play_tune();
+                        count = 0; 
+                    }
+                    // if input is valid the LED lights up green, else the LED lights up red
+                    if (input_validity){
+                        setup_rgb(); // Lab 8 function to intialize the parameters of the RGB LED 
+                        show_rgb(255, 0, 0); // Display red on the RBG LED
+                        sleep_ms(1000); // Red stays on for 1 second 
+
+                    }
+                    else {
+                        setup_rgb();
+                        show_rgb(0, 255, 0); // Display green on the RBG LED
+                        sleep_ms(1000); // Green stays on for 1 second 
+                    }
+                    show_rgb(0, 0, 0); // Turn the LED off 
+                
                 }
             }
         }
@@ -132,11 +176,15 @@ void displayNewLetter() {
     seven_segment_off();   
     if (index >= 0) {
         printf("Letter to display is: %c\n", alphabet[index]);
-        seven_segment_show(index);     
+        seven_segment_show(index);   
+        count = count + 1; // Increase count if input is correct
+        strcat(word, alphabet[index]); // Add the alphabet into the word array
+        input_validity = true;  
     }
     else {
         printf("Invalid Morse code\n");   
         buzzer_negative();
+        input_validity = false;        
     }
 }
 
@@ -191,6 +239,48 @@ unsigned int get_time_limit_from_potentiometer() {
     printf("Current time limit: %d ms\n", mapped_time_limit);
     return mapped_time_limit;
 }
+
+// Code from Lab 8, setup of the RGB LEDs
+void setup_rgb() {
+    gpio_set_function(RED, GPIO_FUNC_PWM);
+    gpio_set_function(GREEN, GPIO_FUNC_PWM);
+    gpio_set_function(BLUE, GPIO_FUNC_PWM);
+
+    uint slice_num = pwm_gpio_to_slice_num(RED);
+    pwm_config config = pwm_get_default_config();
+    pwm_init(slice_num, &config, true);
+
+    slice_num = pwm_gpio_to_slice_num(GREEN);
+    pwm_init(slice_num, &config, true);
+
+    slice_num = pwm_gpio_to_slice_num(BLUE);
+    pwm_init(slice_num, &config, true);
+}
+
+void show_rgb(int r, int g, int b) {
+    pwm_set_gpio_level(RED, ~(MAX_PWM_LEVEL * r / MAX_COLOUR_VALUE * BRIGHTNESS / 100));
+    pwm_set_gpio_level(GREEN, ~(MAX_PWM_LEVEL * g / MAX_COLOUR_VALUE * BRIGHTNESS / 100));
+    pwm_set_gpio_level(BLUE, ~(MAX_PWM_LEVEL * b / MAX_COLOUR_VALUE * BRIGHTNESS / 100));
+}
+
+void play_tune(){
+    // first run 
+    playNote(D_NOTE, 200);
+    sleep_ms(400);
+    playNote(F_NOTE, 200);
+    playNote(E_NOTE, 200);
+    sleep_ms(200);
+    playNote(D_NOTE, 200);
+    sleep_ms(600);
+    playNote(A_NOTE, 200);
+    sleep_ms(200);
+    playNote(G_NOTE, 200);
+    sleep_ms(450);    
+    playNote(F_NOTE, 200);
+}
+
+
+
 
 
 
