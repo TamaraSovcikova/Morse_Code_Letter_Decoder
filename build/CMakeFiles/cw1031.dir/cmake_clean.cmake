@@ -23,6 +23,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/cw1031.dir/opt/pico-sdk/src/common/pico_util/queue.c.obj.d"
   "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2040/pico_platform/platform.c.obj"
   "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2040/pico_platform/platform.c.obj.d"
+  "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.obj"
+  "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.obj.d"
   "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.obj"
   "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.obj.d"
   "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.obj"

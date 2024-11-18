@@ -7,6 +7,8 @@
 #include "includes/seven_segment.h"
 #include "includes/buzzer.h"
 #include "includes/potentiometer.h"
+#include "potentiometer.c"
+#include "buzzer.c"
 
 
 // Global variables
@@ -18,6 +20,8 @@
 #define DOT_FREQUENCY 440       // Dot beep (A4)
 #define DASH_FREQUENCY 349      // Dash beep (F4)
 #define DEFAULT_TIME_LIMIT 4000   // Default time limit (4 seconds)
+#define MAX_TIME_LIMIT 10000
+#define MIN_TIME_LIMIT 1000
 
 
 clock_t start_time;
@@ -37,19 +41,36 @@ void buzzer_long_beep();
 unsigned int get_time_limit_from_potentiometer();
 
 int main() {
+    timer_hw->dbgpause = 0;
     stdio_init_all();
     seven_segment_init();
     seven_segment_off();
     buzzer_init(); 
     potentiometer_init();
 
-
     gpio_init(BUTTON_PIN);
     gpio_set_dir(BUTTON_PIN, GPIO_IN);
     gpio_pull_down(BUTTON_PIN);
-
+ 
     bool button_released = true;
+printf("time limit 1 %d \n", time_limit);
+    //Getting inicial potentiometer value
+    time_limit = get_time_limit_from_potentiometer();
+    printf("time limit 2--- %d \n", time_limit);
+    //Promting for time limit change via the potentiometer
+    printf("Do you want to change the time limit? (You have 10 seconds) \n");
+    sleep_ms(10000);
+    int temp_time_limit = get_time_limit_from_potentiometer();
 
+    //Checking if potentiometer has changed
+    if (temp_time_limit == time_limit){
+        time_limit = DEFAULT_TIME_LIMIT;        
+    }
+    else {
+        time_limit = temp_time_limit;         
+    }
+
+    //setting the time limit based on the potentiometer   
     while (true) {
         // Check if the button is pressed
         if (gpio_get(BUTTON_PIN)) {
@@ -76,6 +97,11 @@ int main() {
                     morseCodeInput[len + 1] = '\0';
                     printf("morseCodeInput: %s\n", morseCodeInput);
                 }
+                else{ 
+                   morseCodeInput[0] = '\0'; 
+                   printf("Input too long - reset");
+                   buzzer_negative();
+                }
 
                 button_released = true;
                 start_time = clock();  // Reset start time for letter gap tracking
@@ -83,8 +109,7 @@ int main() {
                 // Check for letter gap
                 clock_t current_time = clock();
 
-                //setting the time limit based on the potentiometer
-                time_limit = get_time_limit_from_potentiometer();
+         
                 double time_gap = (double)(current_time - start_time) / CLOCKS_PER_SEC * 1000;
                 if (time_gap > time_limit && strlen(morseCodeInput) > 0) {
                     printf("Letter gap detected\n");
@@ -101,17 +126,18 @@ int main() {
 
 void displayNewLetter() {
     int index = decoder(morseCodeInput);
-    if (index == -1) {
-          printf("INPUT IS INVALID");
-          buzzer_negative();
+
+    morseCodeInput[0] = '\0';  // Reset Morse code input
+    printf("Resetting morseCodeInput: %s\n", morseCodeInput);
+    seven_segment_off();   
+    if (index >= 0) {
+        printf("Letter to display is: %c\n", alphabet[index]);
+        seven_segment_show(index);     
     }
     else {
-        printf("Letter to display is: %c\n", alphabet[index]);
-        seven_segment_show(index);
+        printf("Invalid Morse code\n");   
+        buzzer_negative();
     }
-
-    morseCodeInput[0] = '\0';  // Reset Morse code input 
-    seven_segment_off();
 }
 
 int decoder(char *morse_code) {
@@ -139,17 +165,18 @@ char checkButton(double time_taken) {
 }
 
 void playNote(unsigned int frequency, int duration_ms) {	
+    buzzer_init(); 
 	buzzer_enable(frequency);
-	sleep_ms(duration_ms);	
-    buzzer_disable(); //Not sure if this needs to be here
+	sleep_ms(duration_ms);	    
+    buzzer_disable();
 }
 
 void buzzer_negative() {
-	playNote(NEGATIVE_FREQUENCY, 1000);
+	playNote(NEGATIVE_FREQUENCY, 1000);   
 }
 
 void buzzer_short_beep() {
-	playNote(DOT_FREQUENCY, 200);
+	playNote(DOT_FREQUENCY, 200);   
 }
 
 void buzzer_long_beep() {

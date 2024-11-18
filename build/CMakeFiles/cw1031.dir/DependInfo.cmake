@@ -126,6 +126,8 @@ set(CMAKE_ASM_TARGET_INCLUDE_PATH
   "/opt/pico-sdk/src/rp2_common/pico_mem_ops/include"
   "/opt/pico-sdk/src/rp2040/boot_stage2/include"
   "/opt/pico-sdk/src/common/boot_picobin_headers/include"
+  "/opt/pico-sdk/src/rp2_common/hardware_pwm/include"
+  "/opt/pico-sdk/src/rp2_common/hardware_adc/include"
   )
 
 # The set of dependency files which are needed:
@@ -142,6 +144,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/opt/pico-sdk/src/common/pico_util/pheap.c" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/common/pico_util/pheap.c.obj" "gcc" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/common/pico_util/pheap.c.obj.d"
   "/opt/pico-sdk/src/common/pico_util/queue.c" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/common/pico_util/queue.c.obj" "gcc" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/common/pico_util/queue.c.obj.d"
   "/opt/pico-sdk/src/rp2040/pico_platform/platform.c" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2040/pico_platform/platform.c.obj" "gcc" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2040/pico_platform/platform.c.obj.d"
+  "/opt/pico-sdk/src/rp2_common/hardware_adc/adc.c" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.obj" "gcc" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.obj.d"
   "/opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.obj" "gcc" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.obj.d"
   "/opt/pico-sdk/src/rp2_common/hardware_clocks/clocks.c" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.obj" "gcc" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.obj.d"
   "/opt/pico-sdk/src/rp2_common/hardware_gpio/gpio.c" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.obj" "gcc" "CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.obj.d"

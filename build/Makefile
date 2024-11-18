@@ -482,6 +482,30 @@ opt/pico-sdk/src/rp2040/pico_platform/platform.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cw1031.dir/build.make CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2040/pico_platform/platform.c.s
 .PHONY : opt/pico-sdk/src/rp2040/pico_platform/platform.c.s
 
+opt/pico-sdk/src/rp2_common/hardware_adc/adc.obj: opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.obj
+.PHONY : opt/pico-sdk/src/rp2_common/hardware_adc/adc.obj
+
+# target to build an object file
+opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cw1031.dir/build.make CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.obj
+.PHONY : opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.obj
+
+opt/pico-sdk/src/rp2_common/hardware_adc/adc.i: opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.i
+.PHONY : opt/pico-sdk/src/rp2_common/hardware_adc/adc.i
+
+# target to preprocess a source file
+opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cw1031.dir/build.make CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.i
+.PHONY : opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.i
+
+opt/pico-sdk/src/rp2_common/hardware_adc/adc.s: opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.s
+.PHONY : opt/pico-sdk/src/rp2_common/hardware_adc/adc.s
+
+# target to generate assembly for a file
+opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cw1031.dir/build.make CMakeFiles/cw1031.dir/opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.s
+.PHONY : opt/pico-sdk/src/rp2_common/hardware_adc/adc.c.s
+
 opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.obj: opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.obj
 .PHONY : opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.obj
 
@@ -1412,6 +1436,9 @@ help:
 	@echo "... opt/pico-sdk/src/rp2040/pico_platform/platform.obj"
 	@echo "... opt/pico-sdk/src/rp2040/pico_platform/platform.i"
 	@echo "... opt/pico-sdk/src/rp2040/pico_platform/platform.s"
+	@echo "... opt/pico-sdk/src/rp2_common/hardware_adc/adc.obj"
+	@echo "... opt/pico-sdk/src/rp2_common/hardware_adc/adc.i"
+	@echo "... opt/pico-sdk/src/rp2_common/hardware_adc/adc.s"
 	@echo "... opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.obj"
 	@echo "... opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.i"
 	@echo "... opt/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.s"

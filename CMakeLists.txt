@@ -7,4 +7,4 @@ pico_sdk_init()
 
 add_executable(cw1031 morse_code.c)
 target_link_libraries(cw1031 pico_stdlib)
-
+target_link_libraries(cw1031 pico_stdlib hardware_pwm hardware_adc) # <-- added the Pico ADC library
