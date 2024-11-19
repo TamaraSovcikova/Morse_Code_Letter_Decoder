@@ -55,7 +55,6 @@ void buzzer_long_beep();
 unsigned int get_time_limit_from_potentiometer();
 void setup_rgb();   // Used to intialize the parameters of the RGB LED 
 void show_rgb(int r, int g, int b); // Used to input the colour value for R/G/B
-bool input_validity;
 void play_tune(); // tune if word is 4 letters long 
 
 
@@ -70,12 +69,12 @@ int main() {
     gpio_init(BUTTON_PIN);
     gpio_set_dir(BUTTON_PIN, GPIO_IN);
     gpio_pull_down(BUTTON_PIN);
+    setup_rgb();
+    show_rgb(0, 0, 0); //Turning off LED 
  
-    bool button_released = true;
-printf("time limit 1 %d \n", time_limit);
+    bool button_released = true;    
     //Getting inicial potentiometer value
-    time_limit = get_time_limit_from_potentiometer();
-    printf("time limit 2--- %d \n", time_limit);
+    time_limit = get_time_limit_from_potentiometer();    
     //Promting for time limit change via the potentiometer
     printf("Do you want to change the time limit? (You have 10 seconds) \n");
     sleep_ms(10000);
@@ -135,7 +134,7 @@ printf("time limit 1 %d \n", time_limit);
                     displayNewLetter();
                     //BELOW
                     if (count == 4){
-                        // Displau the 4 letter word
+                        // Display the 4 letter word
                         printf("The word inputted is:", word);
                         // Reset the array after word is displayed 
                         for (int i = 0; i < 5; i++){
@@ -144,20 +143,6 @@ printf("time limit 1 %d \n", time_limit);
                         play_tune();
                         count = 0; 
                     }
-                    // if input is valid the LED lights up green, else the LED lights up red
-                    if (input_validity){
-                        setup_rgb(); // Lab 8 function to intialize the parameters of the RGB LED 
-                        show_rgb(255, 0, 0); // Display red on the RBG LED
-                        sleep_ms(1000); // Red stays on for 1 second 
-
-                    }
-                    else {
-                        setup_rgb();
-                        show_rgb(0, 255, 0); // Display green on the RBG LED
-                        sleep_ms(1000); // Green stays on for 1 second 
-                    }
-                    show_rgb(0, 0, 0); // Turn the LED off 
-                
                 }
             }
         }
@@ -175,17 +160,23 @@ void displayNewLetter() {
     printf("Resetting morseCodeInput: %s\n", morseCodeInput);
     seven_segment_off();   
     if (index >= 0) {
+        setup_rgb(); // Lab 8 function to intialize the parameters of the RGB LED 
+        show_rgb(0, 255, 0); // Display green on the RBG LED        
+        sleep_ms(1000);
         printf("Letter to display is: %c\n", alphabet[index]);
         seven_segment_show(index);   
         count = count + 1; // Increase count if input is correct
         strcat(word, alphabet[index]); // Add the alphabet into the word array
-        input_validity = true;  
+      
     }
     else {
         printf("Invalid Morse code\n");   
         buzzer_negative();
-        input_validity = false;        
+        setup_rgb();
+        show_rgb(255, 0, 0); // Display red on the RBG LED        
+        sleep_ms(1000); // Green stays on for 1 second     
     }
+    show_rgb(0, 0, 0); // Turn the LED off 
 }
 
 int decoder(char *morse_code) {
