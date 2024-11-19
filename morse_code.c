@@ -2,6 +2,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "hardware/adc.h"
 #include "pico/stdlib.h"
 #include "includes/seven_segment.h"
@@ -13,6 +14,7 @@
 
 // Global variables
 #define BUTTON_PIN 16
+#define BUTTON_RIGHT_PIN 22
 #define DEBOUNCE_DELAY 200
 #define DOT_THRESHOLD 250   // Threshold for a dot (quick press)
 #define MAX_MORSE_LENGTH 4  
@@ -56,6 +58,7 @@ unsigned int get_time_limit_from_potentiometer();
 void setup_rgb();   // Used to intialize the parameters of the RGB LED 
 void show_rgb(int r, int g, int b); // Used to input the colour value for R/G/B
 void play_tune(); // tune if word is 4 letters long 
+void decideContinue();
 
 
 int main() {
@@ -87,6 +90,7 @@ int main() {
     else {
         time_limit = temp_time_limit;         
     }
+    printf("TIME LIMIT SET: %d \n", time_limit);
 
     //setting the time limit based on the potentiometer   
     while (true) {
@@ -135,13 +139,14 @@ int main() {
                     //BELOW
                     if (count == 4){
                         // Display the 4 letter word
-                        printf("The word inputted is:", word);
-                        // Reset the array after word is displayed 
-                        for (int i = 0; i < 5; i++){
-                            word[i] = '\0';
-                        }
-                        play_tune();
-                        count = 0; 
+                        printf("The word inputted is: "); 
+                        for (int i = 0; i < 4; i++) 
+                        {
+                            printf("%c",word[i]);
+                        }        
+                        printf("\n");                
+                        play_tune();                        
+                        decideContinue();
                     }
                 }
             }
@@ -159,20 +164,22 @@ void displayNewLetter() {
     morseCodeInput[0] = '\0';  // Reset Morse code input
     printf("Resetting morseCodeInput: %s\n", morseCodeInput);
     seven_segment_off();   
-    if (index >= 0) {
-        setup_rgb(); // Lab 8 function to intialize the parameters of the RGB LED 
+    if (index >= 0) {        
         show_rgb(0, 255, 0); // Display green on the RBG LED        
         sleep_ms(1000);
         printf("Letter to display is: %c\n", alphabet[index]);
         seven_segment_show(index);   
+        for (int i = 0; i < 4; i++) 
+        {
+        word[count] = alphabet[index];
+        }        
         count = count + 1; // Increase count if input is correct
-        strcat(word, alphabet[index]); // Add the alphabet into the word array
+        sleep_ms(100);
       
     }
     else {
         printf("Invalid Morse code\n");   
-        buzzer_negative();
-        setup_rgb();
+        buzzer_negative();        
         show_rgb(255, 0, 0); // Display red on the RBG LED        
         sleep_ms(1000); // Green stays on for 1 second     
     }
@@ -249,6 +256,7 @@ void setup_rgb() {
 }
 
 void show_rgb(int r, int g, int b) {
+    setup_rgb();
     pwm_set_gpio_level(RED, ~(MAX_PWM_LEVEL * r / MAX_COLOUR_VALUE * BRIGHTNESS / 100));
     pwm_set_gpio_level(GREEN, ~(MAX_PWM_LEVEL * g / MAX_COLOUR_VALUE * BRIGHTNESS / 100));
     pwm_set_gpio_level(BLUE, ~(MAX_PWM_LEVEL * b / MAX_COLOUR_VALUE * BRIGHTNESS / 100));
@@ -268,6 +276,35 @@ void play_tune(){
     playNote(G_NOTE, 200);
     sleep_ms(450);    
     playNote(F_NOTE, 200);
+}
+
+void decideContinue() {
+    printf("Press Left Button to continue and Right to Terminate\n");
+    
+    bool loop = true;
+    while(loop) {
+    if (gpio_get(BUTTON_PIN)) {
+        //RESET COMPONENTS
+        count = 0; 
+        morseCodeInput[0] = '\0';  
+        word[0] = '\0';     
+        show_rgb(0, 255, 0); 
+        sleep_ms(1000);
+        show_rgb(0, 0, 0); //Turning off LED 
+        loop = false; 
+    }
+    if (gpio_get(BUTTON_RIGHT_PIN))
+    {
+        buzzer_disable();
+        show_rgb(255, 0, 0); 
+        sleep_ms(1000);
+        show_rgb(0, 0, 0); //Turning off LED 
+        exit(0);
+    }
+    }
+
+    
+
 }
 
 

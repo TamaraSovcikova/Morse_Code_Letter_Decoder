@@ -38,6 +38,9 @@ CMakeFiles/cw1031.dir/morse_code.c.obj: ../morse_code.c \
   /usr/include/newlib/time.h \
   /usr/include/newlib/machine/time.h \
   /usr/lib/gcc/arm-none-eabi/10.3.1/include/stdbool.h \
+  /usr/include/newlib/stdlib.h \
+  /usr/include/newlib/machine/stdlib.h \
+  /usr/include/newlib/alloca.h \
   /opt/pico-sdk/src/rp2_common/hardware_adc/include/hardware/adc.h \
   /opt/pico-sdk/src/common/pico_base_headers/include/pico.h \
   /opt/pico-sdk/src/common/pico_base_headers/include/pico/types.h \
@@ -2309,9 +2312,9 @@ generated/pico_base/pico/config_autogen.h:
 
 /opt/pico-sdk/src/common/pico_base_headers/include/pico/types.h:
 
-/opt/pico-sdk/src/rp2_common/hardware_timer/include/hardware/timer.h:
-
 /usr/include/newlib/stdlib.h:
+
+/opt/pico-sdk/src/rp2_common/hardware_timer/include/hardware/timer.h:
 
 /opt/pico-sdk/src/common/pico_base_headers/include/pico/config.h:
 
@@ -2341,6 +2344,8 @@ generated/pico_base/pico/config_autogen.h:
 
 /opt/pico-sdk/src/rp2040/hardware_structs/include/hardware/structs/m0plus.h:
 
+/usr/include/newlib/sys/sched.h:
+
 /opt/pico-sdk/src/common/pico_binary_info/include/pico/binary_info/structure.h:
 
 /opt/pico-sdk/src/rp2040/hardware_structs/include/hardware/structs/vreg_and_chip_reset.h:
@@ -2358,6 +2363,20 @@ generated/pico_base/pico/config_autogen.h:
 /opt/pico-sdk/src/rp2_common/hardware_sync/include/hardware/sync.h:
 
 /usr/include/newlib/sys/features.h:
+
+/opt/pico-sdk/src/rp2_common/hardware_timer/timer.c:
+
+/usr/include/newlib/alloca.h:
+
+/usr/include/newlib/sys/reent.h:
+
+/opt/pico-sdk/src/rp2040/hardware_structs/include/hardware/structs/timer.h:
+
+/opt/pico-sdk/src/rp2_common/hardware_xosc/include/hardware/xosc.h:
+
+../potentiometer.c:
+
+/opt/pico-sdk/src/rp2040/hardware_regs/include/hardware/regs/addressmap.h:
 
 /opt/pico-sdk/src/rp2040/hardware_structs/include/hardware/structs/clocks.h:
 
@@ -2391,8 +2410,6 @@ generated/pico_base/pico/version.h:
 
 /opt/pico-sdk/src/rp2040/hardware_regs/include/hardware/regs/timer.h:
 
-/opt/pico-sdk/src/rp2_common/hardware_base/include/hardware/address_mapped.h:
-
 /usr/include/newlib/machine/time.h:
 
 /usr/include/newlib/stdio.h:
@@ -2419,6 +2436,10 @@ generated/pico_base/pico/version.h:
 
 /usr/include/newlib/sys/_sigset.h:
 
+/usr/include/newlib/machine/stdlib.h:
+
+/usr/include/newlib/sys/_stdint.h:
+
 /opt/pico-sdk/src/rp2_common/hardware_boot_lock/include/hardware/boot_lock.h:
 
 /usr/include/newlib/machine/_types.h:
@@ -2430,18 +2451,6 @@ generated/pico_base/pico/version.h:
 /usr/include/newlib/sys/_timespec.h:
 
 /opt/pico-sdk/src/common/pico_sync/include/pico/critical_section.h:
-
-/usr/include/newlib/sys/sched.h:
-
-/opt/pico-sdk/src/rp2_common/hardware_xosc/include/hardware/xosc.h:
-
-/opt/pico-sdk/src/rp2040/hardware_regs/include/hardware/regs/addressmap.h:
-
-../potentiometer.c:
-
-/usr/include/newlib/sys/_stdint.h:
-
-/usr/include/newlib/machine/stdlib.h:
 
 /usr/include/newlib/sys/_pthreadtypes.h:
 
@@ -2474,6 +2483,8 @@ generated/pico_base/pico/version.h:
 /opt/pico-sdk/src/rp2040/hardware_regs/include/hardware/regs/pwm.h:
 
 /opt/pico-sdk/src/common/pico_sync/sem.c:
+
+/opt/pico-sdk/src/rp2_common/hardware_base/include/hardware/address_mapped.h:
 
 /opt/pico-sdk/src/rp2040/hardware_structs/include/hardware/structs/sio.h:
 
@@ -2570,14 +2581,6 @@ generated/pico_base/pico/version.h:
 /opt/pico-sdk/src/rp2_common/pico_runtime_init/include/pico/runtime_init.h:
 
 /opt/pico-sdk/src/common/pico_time/time.c:
-
-/opt/pico-sdk/src/rp2_common/hardware_timer/timer.c:
-
-/usr/include/newlib/sys/reent.h:
-
-/opt/pico-sdk/src/rp2040/hardware_structs/include/hardware/structs/timer.h:
-
-/usr/include/newlib/alloca.h:
 
 /opt/pico-sdk/src/rp2040/hardware_structs/include/hardware/structs/nvic.h:
 

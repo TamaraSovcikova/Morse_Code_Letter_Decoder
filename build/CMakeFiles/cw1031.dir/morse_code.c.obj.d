@@ -20,6 +20,8 @@ CMakeFiles/cw1031.dir/morse_code.c.obj: \
  /usr/include/newlib/strings.h /usr/include/newlib/sys/string.h \
  /usr/include/newlib/time.h /usr/include/newlib/machine/time.h \
  /usr/lib/gcc/arm-none-eabi/10.3.1/include/stdbool.h \
+ /usr/include/newlib/stdlib.h /usr/include/newlib/machine/stdlib.h \
+ /usr/include/newlib/alloca.h \
  /opt/pico-sdk/src/rp2_common/hardware_adc/include/hardware/adc.h \
  /opt/pico-sdk/src/common/pico_base_headers/include/pico.h \
  /opt/pico-sdk/src/common/pico_base_headers/include/pico/types.h \
