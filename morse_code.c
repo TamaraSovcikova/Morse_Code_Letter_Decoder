@@ -59,6 +59,7 @@ void setup_rgb();   // Used to intialize the parameters of the RGB LED
 void show_rgb(int r, int g, int b); // Used to input the colour value for R/G/B
 void play_tune(); // tune if word is 4 letters long 
 void decideContinue();
+bool check_symbol =true;
 
 
 int main() {
@@ -68,6 +69,7 @@ int main() {
     seven_segment_off();
     buzzer_init(); 
     potentiometer_init();
+    
 
     gpio_init(BUTTON_PIN);
     gpio_set_dir(BUTTON_PIN, GPIO_IN);
@@ -110,19 +112,21 @@ int main() {
 
                 // Determine if it was a dot or dash
                 char symbol = checkButton(time_taken);
-                printf("Symbol: %c\n", symbol);
+                if(check_symbol){
+                    printf("Symbol: %c\n", symbol);
 
-                // Add the symbol to the Morse code string
-                int len = strlen(morseCodeInput);
-                if (len < MAX_MORSE_LENGTH) {
-                    morseCodeInput[len] = symbol;
-                    morseCodeInput[len + 1] = '\0';
-                    printf("morseCodeInput: %s\n", morseCodeInput);
-                }
-                else{ 
-                   morseCodeInput[0] = '\0'; 
-                   printf("Input too long - reset");
-                   buzzer_negative();
+                    // Add the symbol to the Morse code string
+                    int len = strlen(morseCodeInput);
+                    if (len < MAX_MORSE_LENGTH) {
+                        morseCodeInput[len] = symbol;
+                        morseCodeInput[len + 1] = '\0';
+                        printf("morseCodeInput: %s\n", morseCodeInput);
+                    }
+                    else{ 
+                    morseCodeInput[0] = '\0'; 
+                    printf("Input too long - reset");
+                    buzzer_negative();
+                    }
                 }
 
                 button_released = true;
@@ -203,10 +207,22 @@ int decoder(char *morse_code) {
 char checkButton(double time_taken) {
     if (time_taken < DOT_THRESHOLD) {
         buzzer_short_beep();
+        check_symbol = true;
         return '.';  // Quick press is a dot
-    } else {
-        buzzer_long_beep();
-        return '-';  // Long press is a dash
+
+    }else {
+        if (time_taken >700){
+            printf("Error - button held for too long :( \n");
+            seven_segment_show(26);
+            sleep_ms(1000);
+            seven_segment_off();
+            check_symbol = false;
+            
+        }else{
+            buzzer_long_beep();
+            check_symbol = true;
+            return '-';  // Long press is a dash
+        }
     }
 }
 
