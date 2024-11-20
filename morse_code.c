@@ -35,7 +35,7 @@
 #define F_NOTE 698
 #define E_NOTE 659
 #define G_NOTE 784
-#define FSharp_NOTE 739 
+
 
 
 clock_t start_time;
@@ -66,7 +66,6 @@ int main() {
     timer_hw->dbgpause = 0;
     stdio_init_all();
     seven_segment_init();
-    seven_segment_show(26);
     seven_segment_off();
     buzzer_init(); 
     potentiometer_init();
@@ -77,8 +76,24 @@ int main() {
     gpio_pull_down(BUTTON_PIN);
     setup_rgb();
     show_rgb(0, 0, 0); //Turning off LED 
+    printf("WELCOME ʕ•.•̀ʔっ \n");
+    printf("From Group #87 (Rhea Aaliyah Tamara) ✧ ٩(•.•๑)و ✧ \n");
+
+    // Welcome message and turning the seven segment on and off
+    seven_segment_show(0);
+    sleep_ms(1000);
+    seven_segment_off();
+
+    seven_segment_show(17);
+    sleep_ms(1000);
+    seven_segment_off();
+
+    seven_segment_show(19);
+    sleep_ms(1000);
+    seven_segment_off();
+
     
-    printf("WELCOME :)) \n");
+
 
     bool button_released = true;    
     //Getting inicial potentiometer value
@@ -293,8 +308,8 @@ void play_tune(){
     playNote(A_NOTE, 200);
     sleep_ms(200);
     playNote(G_NOTE, 200);
-    sleep_ms(450);    
-    playNote(F_NOTE, 200);
+    sleep_ms(550);    
+    playNote(E_NOTE, 300);
 }
 
 void decideContinue() {
@@ -311,7 +326,7 @@ void decideContinue() {
         sleep_ms(1000);
         show_rgb(0, 0, 0); //Turning off LED 
         seven_segment_off();
-        printf("Continuing \n");
+        printf("Continuing ¯(ツ)_/¯.\n");
         loop = false; 
     }
     if (gpio_get(BUTTON_RIGHT_PIN))
