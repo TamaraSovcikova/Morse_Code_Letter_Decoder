@@ -66,6 +66,7 @@ int main() {
     timer_hw->dbgpause = 0;
     stdio_init_all();
     seven_segment_init();
+    seven_segment_show(26);
     seven_segment_off();
     buzzer_init(); 
     potentiometer_init();
@@ -76,7 +77,9 @@ int main() {
     gpio_pull_down(BUTTON_PIN);
     setup_rgb();
     show_rgb(0, 0, 0); //Turning off LED 
- 
+    
+    printf("WELCOME :)) \n");
+
     bool button_released = true;    
     //Getting inicial potentiometer value
     time_limit = get_time_limit_from_potentiometer();    
@@ -307,6 +310,8 @@ void decideContinue() {
         show_rgb(0, 255, 0); 
         sleep_ms(1000);
         show_rgb(0, 0, 0); //Turning off LED 
+        seven_segment_off();
+        printf("Continuing \n");
         loop = false; 
     }
     if (gpio_get(BUTTON_RIGHT_PIN))
@@ -315,6 +320,7 @@ void decideContinue() {
         show_rgb(255, 0, 0); 
         sleep_ms(1000);
         show_rgb(0, 0, 0); //Turning off LED 
+        seven_segment_off();
         exit(0);
     }
     }
