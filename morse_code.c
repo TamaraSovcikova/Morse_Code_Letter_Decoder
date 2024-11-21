@@ -77,22 +77,11 @@ int main() {
     setup_rgb();
     show_rgb(0, 0, 0); //Turning off LED 
     printf("WELCOME ʕ•.•̀ʔっ \n");
-    printf("From Group #87 (Rhea Aaliyah Tamara) ✧ ٩(•.•๑)و ✧ \n");
-
-    // Welcome message and turning the seven segment on and off
-    seven_segment_show(0);
-    sleep_ms(1000);
-    seven_segment_off();
-
-    seven_segment_show(17);
-    sleep_ms(1000);
-    seven_segment_off();
-
-    seven_segment_show(19);
-    sleep_ms(1000);
-    seven_segment_off();
-
     
+    // Welcome message and turning the seven segment on and off
+    seven_segment_show(27);
+    sleep_ms(1000);
+    seven_segment_off();     
 
 
     bool button_released = true;    
