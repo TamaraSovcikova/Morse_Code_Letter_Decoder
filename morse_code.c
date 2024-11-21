@@ -79,7 +79,7 @@ int main() {
     printf("WELCOME ʕ•.•̀ʔっ \n");
     
     // Welcome message and turning the seven segment on and off
-    seven_segment_show(27);
+    seven_segment_show(26);
     sleep_ms(1000);
     seven_segment_off();     
 
